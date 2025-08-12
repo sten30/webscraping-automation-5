@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>वेब पार्सिंग और डेटा एक्सट्रैक्शन सेवाएं</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,0 1000,300 1000,1000 0,700"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-buttons {
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-custom:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .hero-illustration {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .table-mockup {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            color: #333;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .advantage-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid #f0f0f0;
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .advantage-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .target-audience {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .audience-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .audience-card:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-5px);
+        }
+
+        .price-monitoring {
+            background: #f8f9fa;
+        }
+
+        .monitoring-visual {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        .web-development {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .pricing-section {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .contact-form {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .form-control-custom {
+            border: none;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.95);
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            background: white;
+        }
+
+        .faq-section {
+            background: #f8f9fa;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .faq-question {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #5a67d8;
+        }
+
+        .faq-answer {
+            padding: 20px;
+            display: none;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 50px 0 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            color: #667eea;
+        }
+
+        .contact-item i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+            .btn-primary-custom, .btn-outline-custom {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section d-flex align-items-center">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">हम किसी भी वेबसाइट से डेटा एक्सेल, CSV और JSON में इकट्ठा करते हैं</h1>
+                        <p class="hero-subtitle">रूटीन को ऑटोमेट करें — वेबसाइट या ऐप का कस्टम पार्सर ऑर्डर करें</p>
+                        <div class="cta-buttons">
+                            <button class="btn btn-primary-custom">मूल्य जानें</button>
+                            <button class="btn btn-outline-custom">अनुरोध भेजें</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-illustration">
+                        <div class="table-mockup">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5><i class="fas fa-table me-2"></i>डेटा एक्सट्रैक्शन</h5>
+                                <span class="badge bg-success">लाइव</span>
+                            </div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>उत्पाद</th>
+                                        <th>मूल्य</th>
+                                        <th>स्थिति</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>लैपटॉप HP</td>
+                                        <td>₹45,000</td>
+                                        <td><span class="badge bg-success">उपलब्ध</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>मोबाइल iPhone</td>
+                                        <td>₹65,000</td>
+                                        <td><span class="badge bg-warning">कम स्टॉक</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>हेडफोन Sony</td>
+                                        <td>₹8,500</td>
+                                        <td><span class="badge bg-success">उपलब्ध</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">हमारे फायदे</h2>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="advantage-card animate-on-scroll">
+                        <div class="advantage-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <h4>व्यक्तिगत दृष्टिकोण</h4>
+                        <p>हर प्रोजेक्ट के लिए कस्टम समाधान</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="advantage-card animate-on-scroll">
+                        <div class="advantage-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h4>8 साल का अनुभव</h4>
+                        <p>डेटा एक्सट्रैक्शन में प्रमाणित विशेषज्ञता</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="advantage-card animate-on-scroll">
+                        <div class="advantage-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4>तेज़ कार्यान्वयन</h4>
+                        <p>1 दिन से शुरू होने वाले प्रोजेक्ट</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="advantage-card animate-on-scroll">
+                        <div class="advantage-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <h4>सीधा एक्सपोर्ट</h4>
+                        <p>Excel, CSV, Google Sheets में डायरेक्ट</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section class="target-audience section-padding">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">यह किसके लिए है?</h2>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="audience-card animate-on-scroll">
+                        <i class="fas fa-chart-line fa-3x mb-3"></i>
+                        <h4>व्यापार</h4>
+                        <p>प्रतिस्पर्धियों का विश्लेषण और बाजार अनुसंधान</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="audience-card animate-on-scroll">
+                        <i class="fas fa-bullhorn fa-3x mb-3"></i>
+                        <h4>मार्केटर्स</h4>
+                        <p>ट्रेंड्स और मार्केट इनसाइट्स के लिए</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="audience-card animate-on-scroll">
+                        <i class="fas fa-code fa-3x mb-3"></i>
+                        <h4>डेवलपर्स</h4>
+                        <p>एप्लिकेशन डेवलपमेंट के लिए डेटा</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="audience-card animate-on-scroll">
+                        <i class="fas fa-balance-scale fa-3x mb-3"></i>
+                        <h4>वकील</h4>
+                        <p>कानूनी जानकारी और रिसर्च</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Monitoring Section -->
+    <section class="price-monitoring section-padding">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">मूल्य निगरानी</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="monitoring-visual animate-on-scroll">
+                        <h4 class="mb-4"><i class="fas fa-chart-bar me-2"></i>विभिन्न साइटों से डेटा संग्रह</h4>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded text-center">
+                                    <i class="fab fa-amazon fa-2x text-warning mb-2"></i>
+                                    <p class="mb-0">Amazon</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded text-center">
+                                    <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
+                                    <p class="mb-0">Flipkart</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded text-center">
+                                    <i class="fas fa-store fa-2x text-success mb-2"></i>
+                                    <p class="mb-0">अन्य साइटें</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded text-center">
+                                    <i class="fas fa-download fa-2x text-info mb-2"></i>
+                                    <p class="mb-0">एक्सपोर्ट</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="animate-on-scroll">
+                        <h3>स्वचालित मूल्य ट्रैकिंग</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="fas fa-check text-success me-3"></i>रियल-टाइम मूल्य अपडेट</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-3"></i>प्रतिस्पर्धी विश्लेषण</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-3"></i>इन्वेंटरी मॉनिटरिंग</li>
+                            <li class="mb-3"><i class="fas fa-check text-success me-3"></i>अलर्ट और नोटिफिकेशन</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web Development Section -->
+    <section class="web-development section-padding">
+        <div class="container text-center">
+            <h2 class="section-title animate-on-scroll">वेब एप्लिकेशन डेवलपमेंट</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="animate-on-scroll">
+                        <h3 class="mb-4">ऑनलाइन टूल्स बनाते हैं, प्रोसेस ऑटोमेट करते हैं</h3>
+                        <p class="lead mb-4">कस्टम वेब एप्लिकेशन्स जो आपके बिज़नेस प्रोसेस को स्वचालित बनाती हैं</p>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <i class="fas fa-cogs fa-3x mb-3"></i>
+                                <h5>ऑटोमेशन टूल्स</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="fas fa-dashboard fa-3x mb-3"></i>
+                                <h5>डैशबोर्ड्स</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <i class="fas fa-cloud fa-3x mb-3"></i>
+                                <h5>क्लाउड सोल्यूशन्स</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">ग्राहक समीक्षाएं</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card animate-on-scroll">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h5>राज शर्मा</h5>
+                        <p class="text-muted mb-3">ई-कॉमर्स मैनेजर</p>
+                        <p>"बेहतरीन सटीकता! हमारे कॉम्पिटिटर एनालिसिस में बहुत मदद मिली। डेटा की क्वालिटी उत्कृष्ट है।"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card animate-on-scroll">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h5>प्रिया गुप्ता</h5>
+                        <p class="text-muted mb-3">मार्केटिंग डायरेक्टर</p>
+                        <p>"तेज़ और भरोसेमंद सेवा। समय पर डिलीवरी और बेहतरीन सपोर्ट। हमारी टीम बहुत खुश है।"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card animate-on-scroll">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h5>अमित कुमार</h5>
+                        <p class="text-muted mb-3">IT डेवलपर</p>
+                        <p>"24/7 सपोर्ट और टेक्निकल एक्सपर्टीज़ शानदार है। कोई भी समस्या का तुरंत समाधान मिलता है।"</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section section-padding">
+        <div class="container text-center">
+            <h2 class="section-title text-white animate-on-scroll">मूल्य निर्धारण</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="animate-on-scroll">
+                        <h3 class="text-white mb-4">मूल्य निर्भर करता है:</h3>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="p-4 rounded" style="background: rgba(255,255,255,0.1);">
+                                    <i class="fas fa-layer-group fa-3x mb-3"></i>
+                                    <h5>जटिलता</h5>
+                                    <p>प्रोजेक्ट की तकनीकी आवश्यकताएं</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-4 rounded" style="background: rgba(255,255,255,0.1);">
+                                    <i class="fas fa-clock fa-3x mb-3"></i>
+                                    <h5>आवृत्ति</h5>
+                                    <p>डेटा अपडेट की फ्रीक्वेंसी</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-4 rounded" style="background: rgba(255,255,255,0.1);">
+                                    <i class="fas fa-file-alt fa-3x mb-3"></i>
+                                    <h5>आउटपुट फॉर्मेट</h5>
+                                    <p>डेटा एक्सपोर्ट का प्रकार</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="lead mt-4">प्रत्येक प्रोजेक्ट के लिए व्यक्तिगत कोटेशन</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title text-white animate-on-scroll">अपने प्रोजेक्ट का मूल्यांकन 30 मिनट में पाएं</h2>
+                    </div>
+                    <form class="animate-on-scroll">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control form-control-custom" placeholder="नाम" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control form-control-custom" placeholder="ईमेल/फोन" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="url" class="form-control form-control-custom" placeholder="वेबसाइट URL">
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control form-control-custom" rows="4" placeholder="टिप्पणी - अपनी आवश्यकताओं का वर्णन करें"></textarea>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary-custom btn-lg">प्रोजेक्ट का मूल्यांकन करें</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section section-padding">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">अक्सर पूछे जाने वाले प्रश्न</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="faq-item animate-on-scroll">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h5 class="mb-0">क्या वेब स्क्रैपिंग कानूनी है? <i class="fas fa-chevron-down float-end"></i></h5>
+                        </div>
+                        <div class="faq-answer">
+                            <p>हां, पब्लिक डेटा की स्क्रैपिंग कानूनी है। हम केवल सार्वजनिक रूप से उपलब्ध जानकारी एकत्र करते हैं और सभी नियमों का पालन करते हैं।</p>
+                        </div>
+                    </div>
+                    <div class="faq-item animate-on-scroll">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h5 class="mb-0">प्रोजेक्ट पूरा होने में कितना समय लगता है? <i class="fas fa-chevron-down float-end"></i></h5>
+                        </div>
+                        <div class="faq-answer">
+                            <p>सरल प्रोजेक्ट्स 1-3 दिन में, जटिल समाधान 1-2 सप्ताह में पूरे होते हैं। हम शुरुआत में ही टाइमलाइन बताते हैं।</p>
+                        </div>
+                    </div>
+                    <div class="faq-item animate-on-scroll">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h5 class="mb-0">कौन से फॉर्मेट में डेटा मिलता है? <i class="fas fa-chevron-down float-end"></i></h5>
+                        </div>
+                        <div class="faq-answer">
+                            <p>हम Excel (.xlsx), CSV, JSON, और सीधे Google Sheets में डेटा प्रदान करते हैं। आपकी आवश्यकता के अनुसार कस्टम फॉर्मेट भी उपलब्ध हैं।</p>
+                        </div>
+                    </div>
+                    <div class="faq-item animate-on-scroll">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h5 class="mb-0">क्या कोई गारंटी है? <i class="fas fa-chevron-down float-end"></i></h5>
+                        </div>
+                        <div class="faq-answer">
+                            <p>हां, हम डेटा की सटीकता और गुणवत्ता की 100% गारंटी देते हैं। यदि आप संतुष्ट नहीं हैं तो पूर्ण रिफंड की नीति है।</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h4 class="mb-4">संपर्क जानकारी</h4>
+                    <div class="contact-item">
+                        <i class="fab fa-telegram"></i>
+                        <a href="https://t.me/sten30" class="text-white text-decoration-none">https://t.me/sten30</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+79818525114" class="text-white text-decoration-none">+7(981)852-5114</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:londi3131@gmail.com" class="text-white text-decoration-none">londi3131@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <a href="https://linkedin.com/in/anatoliy-barsukov-52194bb4" class="text-white text-decoration-none">LinkedIn Profile</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-briefcase"></i>
+                        <a href="https://kwork.ru/user/sten30" class="text-white text-decoration-none">https://kwork.ru/user/sten30</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h4 class="mb-4">हमारी सेवाएं</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check me-2"></i>वेब स्क्रैपिंग और डेटा एक्सट्रैक्शन</li>
+                        <li class="mb-2"><i class="fas fa-check me-2"></i>मूल्य निगरानी सिस्टम</li>
+                        <li class="mb-2"><i class="fas fa-check me-2"></i>वेब एप्लिकेशन डेवलपमेंट</li>
+                        <li class="mb-2"><i class="fas fa-check me-2"></i>ऑटोमेशन टूल्स</li>
+                        <li class="mb-2"><i class="fas fa-check me-2"></i>कस्टम पार्सर्स</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 पार्सिंग और ऑटोमेशन विशेषज्ञों द्वारा</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                // Close all other FAQ items
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.style.display = 'none';
+                });
+                document.querySelectorAll('.faq-question i').forEach(icon => {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                });
+                
+                // Open clicked FAQ
+                answer.style.display = 'block';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        // Smooth scrolling for CTA buttons
+        document.querySelectorAll('.btn-primary-custom, .btn-outline-custom').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('मूल्य जानें')) {
+                    e.preventDefault();
+                    document.querySelector('.pricing-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else if (this.textContent.includes('अनुरोध भेजें')) {
+                    e.preventDefault();
+                    document.querySelector('.contact-form').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize animations
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('धन्यवाद! हम जल्द ही आपसे संपर्क करेंगे।');
+        });
+    </script>
+</body>
+</html>
